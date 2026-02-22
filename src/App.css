@@ -1,0 +1,481 @@
+/* ===== Ethos Profile Peek — Theme ===== */
+
+:root {
+  --ethos-blue: #1f21b6;
+  --ethos-blue-light: #4046c2;
+  --ethos-bg: #c1c0b6;
+  --ethos-card: #ffffff;
+  --ethos-border: #9e9c8d;
+  --ethos-text: rgba(31, 33, 38, 1);
+  --ethos-text-secondary: rgba(31, 33, 38, 0.65);
+  --ethos-success: #127f31;
+  --ethos-warning: #cc9a1a;
+  --ethos-error: #b72b38;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--ethos-bg);
+  color: var(--ethos-text);
+  min-height: 100vh;
+}
+
+#root {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* ===== Animations ===== */
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.fade-in {
+  animation: fade-in 0.35s ease-out;
+}
+
+/* ===== App Layout ===== */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.app-header {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.app-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--ethos-text);
+  letter-spacing: -0.5px;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+}
+
+.app-subtitle {
+  font-size: 0.95rem;
+  color: var(--ethos-text-secondary);
+  margin-top: 0.25rem;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  font-size: 0.8rem;
+  color: var(--ethos-text-secondary);
+}
+
+.app-footer a {
+  color: var(--ethos-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Search Card ===== */
+
+.search-card {
+  background: var(--ethos-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--ethos-border);
+}
+
+.input-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 2px solid var(--ethos-border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fafaf7;
+  color: var(--ethos-text);
+}
+
+.search-input:focus {
+  border-color: var(--ethos-blue);
+}
+
+.search-input::placeholder {
+  color: var(--ethos-text-secondary);
+  font-size: 0.85rem;
+}
+
+.type-badge {
+  position: absolute;
+  right: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+}
+
+.inspect-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: var(--ethos-blue);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.inspect-btn:hover:not(:disabled) {
+  background: var(--ethos-blue-light);
+}
+
+.inspect-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.format-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.format-hints span {
+  font-size: 0.7rem;
+  color: var(--ethos-text-secondary);
+  background: rgba(31, 33, 38, 0.06);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* ===== Error Card ===== */
+
+.error-card {
+  background: var(--ethos-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 2px solid var(--ethos-error);
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.error-text {
+  color: var(--ethos-error);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.retry-btn {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--ethos-error);
+  background: transparent;
+  border: 2px solid var(--ethos-error);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.retry-btn:hover {
+  background: var(--ethos-error);
+  color: #fff;
+}
+
+/* ===== Idle Hint ===== */
+
+.idle-hint {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--ethos-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* ===== Profile Card ===== */
+
+.profile-card {
+  background: var(--ethos-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--ethos-blue);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid var(--ethos-blue);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ethos-blue);
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.display-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--ethos-text);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.username {
+  font-size: 0.8rem;
+  color: var(--ethos-text-secondary);
+}
+
+.ethos-link {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: var(--ethos-blue);
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+.ethos-link:hover {
+  text-decoration: underline;
+}
+
+.score-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 4px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #fafaf7;
+}
+
+.score-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 0.6rem;
+  color: var(--ethos-text-secondary);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Summary Banner ===== */
+
+.summary-banner {
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.summary-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ===== Stats Grid ===== */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stat-card {
+  background: #fafaf7;
+  border-radius: 8px;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ethos-text);
+}
+
+.stat-positive {
+  color: var(--ethos-success);
+}
+
+.stat-negative {
+  color: var(--ethos-error);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--ethos-text-secondary);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-top: 0.2rem;
+}
+
+/* ===== Activities Section ===== */
+
+.activities-section {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 1rem;
+}
+
+.activities-section h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ethos-text);
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.activity-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: #fafaf7;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.activity-type {
+  font-weight: 600;
+}
+
+.activity-date {
+  font-size: 0.75rem;
+  color: var(--ethos-text-secondary);
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 480px) {
+  #root {
+    padding: 1rem 0.75rem;
+  }
+
+  .app-title {
+    font-size: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .profile-header {
+    flex-wrap: wrap;
+  }
+
+  .score-circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .score-value {
+    font-size: 1.2rem;
+  }
+}
