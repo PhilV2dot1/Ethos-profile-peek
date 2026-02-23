@@ -15,7 +15,7 @@ export function useEthosProfile() {
   const [error, setError] = useState<string | null>(null);
 
   const detected: DetectionResult = useMemo(() => {
-    if (!query.trim()) return { type: null, userKey: '', label: '' };
+    if (!query.trim()) return { type: null, pathValue: '', userKey: '', label: '' };
     return detectIdentifier(query);
   }, [query]);
 
@@ -39,7 +39,7 @@ export function useEthosProfile() {
     setProfile(null);
 
     try {
-      const data = await fetchEthosProfile(det.userKey);
+      const data = await fetchEthosProfile(det);
       setProfile(data);
       setState('success');
     } catch (err) {

@@ -6,21 +6,21 @@ interface Props {
 }
 
 function scoreColor(score: number): string {
-  if (score >= 80) return '#127f31';
-  if (score >= 50) return '#1f21b6';
-  if (score >= 20) return '#cc9a1a';
+  if (score >= 2000) return '#127f31';
+  if (score >= 1000) return '#1f21b6';
+  if (score >= 500) return '#cc9a1a';
   return '#b72b38';
 }
 
-function formatDate(dateStr: string): string {
+function formatDate(timestamp: number): string {
   try {
-    return new Date(dateStr).toLocaleDateString('fr-FR', {
+    return new Date(timestamp * 1000).toLocaleDateString('fr-FR', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
     });
   } catch {
-    return dateStr;
+    return String(timestamp);
   }
 }
 
@@ -46,10 +46,13 @@ function formatActivityType(type: string): string {
 export function ProfileCard({ data }: Props) {
   const { user, vouches, activities } = data;
   const score = user.score;
-  const summary = generateSummary(score, user.xpTotal, vouches.total);
+  const vouchReceived = user.stats?.vouch?.received?.count ?? vouches.total;
+  const summary = generateSummary(score, user.xpTotal, vouchReceived);
 
   const positiveVouches = vouches.values.filter((v) => !v.archived && !v.unhealthy).length;
   const negativeVouches = vouches.total - positiveVouches;
+
+  const profileLink = user.links?.profile ?? `https://app.ethos.network/profile/${user.profileId ?? user.id}`;
 
   return (
     <div className="profile-card fade-in">
@@ -68,7 +71,7 @@ export function ProfileCard({ data }: Props) {
             <span className="username">@{user.username}</span>
           )}
           <a
-            href={`https://app.ethos.network/profile/${user.profileId}`}
+            href={profileLink}
             target="_blank"
             rel="noopener noreferrer"
             className="ethos-link"
@@ -88,6 +91,7 @@ export function ProfileCard({ data }: Props) {
       <div className="summary-banner" style={{ backgroundColor: scoreColor(score) + '18' }}>
         <span className="summary-text" style={{ color: scoreColor(score) }}>
           {summary}
+          {data.score?.level && ` — ${data.score.level}`}
         </span>
       </div>
 
@@ -106,21 +110,21 @@ export function ProfileCard({ data }: Props) {
           <span className="stat-label">Vouches −</span>
         </div>
         <div className="stat-card">
-          <span className="stat-value">{activities.total}</span>
+          <span className="stat-value">{activities.length}</span>
           <span className="stat-label">Activités</span>
         </div>
       </div>
 
       {/* Recent Activities */}
-      {activities.values.length > 0 && (
+      {activities.length > 0 && (
         <div className="activities-section">
           <h3>Dernières activités</h3>
           <ul className="activity-list">
-            {activities.values.map((act, i) => (
+            {activities.map((act, i) => (
               <li key={i} className="activity-item">
                 <span className="activity-type">{formatActivityType(act.type)}</span>
-                {act.createdAt && (
-                  <span className="activity-date">{formatDate(act.createdAt)}</span>
+                {act.data?.createdAt && (
+                  <span className="activity-date">{formatDate(act.data.createdAt)}</span>
                 )}
               </li>
             ))}
