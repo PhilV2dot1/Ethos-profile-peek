@@ -1,15 +1,7 @@
-import type { EthosProfileData } from '../lib/ethos-api';
-import { generateSummary } from '../lib/ethos-api';
+import { getTier, type EthosProfileData } from '../lib/ethos-api';
 
 interface Props {
   data: EthosProfileData;
-}
-
-function scoreColor(score: number): string {
-  if (score >= 2000) return '#127f31';
-  if (score >= 1000) return '#1f21b6';
-  if (score >= 500)  return '#cc9a1a';
-  return '#b72b38';
 }
 
 function formatDate(timestamp: number): string {
@@ -24,19 +16,19 @@ function formatDate(timestamp: number): string {
 
 function formatActivityType(type: string): string {
   const labels: Record<string, string> = {
-    vouch:                '👍 Vouch',
-    unvouch:              '👎 Unvouch',
-    review:               '📝 Review',
-    attestation:          '✅ Attestation',
-    vote:                 '🗳️ Vote',
-    'market-vote':        '📊 Market Vote',
-    reply:                '💬 Reply',
-    slash:                '⚡ Slash',
-    'xp-tip':             '💰 XP Tip',
-    'invitation-accepted':'🤝 Invitation',
-    'human-verification': '🧑 Verification',
-    market:               '📈 Market',
-    'broker-post':        '📣 Broker Post',
+    vouch:                 '👍 Vouch',
+    unvouch:               '👎 Unvouch',
+    review:                '📝 Review',
+    attestation:           '✅ Attestation',
+    vote:                  '🗳️ Vote',
+    'market-vote':         '📊 Market Vote',
+    reply:                 '💬 Reply',
+    slash:                 '⚡ Slash',
+    'xp-tip':              '💰 XP Tip',
+    'invitation-accepted': '🤝 Invitation',
+    'human-verification':  '🧑 Verification',
+    market:                '📈 Market',
+    'broker-post':         '📣 Broker Post',
   };
   return labels[type] ?? type;
 }
@@ -44,9 +36,8 @@ function formatActivityType(type: string): string {
 export function ProfileCard({ data }: Props) {
   const { user, vouches, activities } = data;
   const score  = user.score;
-  const color  = scoreColor(score);
-  const vouchReceived = user.stats?.vouch?.received?.count ?? vouches.total;
-  const summary = generateSummary(score, user.xpTotal, vouchReceived);
+  const tier   = getTier(score);
+  const color  = tier.color;
 
   const positiveVouches = vouches.values.filter((v) => !v.archived && !v.unhealthy).length;
   const negativeVouches = vouches.total - positiveVouches;
@@ -57,7 +48,7 @@ export function ProfileCard({ data }: Props) {
   return (
     <div className="profile-card">
 
-      {/* ── Top banner: avatar + name + BIG score ── */}
+      {/* ── Top banner: avatar + name + score ── */}
       <div className="score-banner">
         <div className="profile-left">
           {user.avatarUrl ? (
@@ -78,19 +69,10 @@ export function ProfileCard({ data }: Props) {
           </div>
         </div>
 
-        {/* Score block — big number + 3 bars, faithful to Ethos */}
+        {/* Score block — big number in Literata + tier name below, matching Ethos UI */}
         <div className="score-block">
-          <div className="score-logo-row" style={{ color }}>
-            <span className="score-number">{score}</span>
-            <div className="score-bars">
-              <div className="score-bar" />
-              <div className="score-bar" />
-              <div className="score-bar" />
-            </div>
-          </div>
-          {data.score?.level && (
-            <span className="score-level">{data.score.level}</span>
-          )}
+          <span className="score-number" style={{ color }}>{score}</span>
+          <span className="score-tier-name" style={{ color }}>{tier.nameLabel}</span>
         </div>
       </div>
 
@@ -104,9 +86,10 @@ export function ProfileCard({ data }: Props) {
           </div>
         )}
 
-        {/* Summary */}
-        <div className="summary-banner" style={{ backgroundColor: color + '14' }}>
-          <span className="summary-text" style={{ color }}>{summary}</span>
+        {/* Tier description banner */}
+        <div className="tier-banner" style={{ borderLeftColor: color }}>
+          <span className="tier-label" style={{ color }}>{tier.nameLabel}</span>
+          <span className="tier-desc">{tier.description}</span>
         </div>
 
         {/* Stats */}
@@ -124,8 +107,24 @@ export function ProfileCard({ data }: Props) {
             <span className="stat-label">Vouches −</span>
           </div>
           <div className="stat-card">
-            <span className="stat-value">{user.xpStreakDays}</span>
-            <span className="stat-label">🔥 Streak</span>
+            <span className="stat-value">{user.xpStreakDays > 0 ? `${user.xpStreakDays}🔥` : '—'}</span>
+            <span className="stat-label">Streak</span>
+          </div>
+        </div>
+
+        {/* Score range bar */}
+        <div className="score-range">
+          <div
+            className="score-range-fill"
+            style={{
+              width: `${Math.min(100, (score / 2800) * 100)}%`,
+              backgroundColor: color,
+            }}
+          />
+          <div className="score-range-labels">
+            <span>0</span>
+            <span style={{ color, fontWeight: 700 }}>{score}</span>
+            <span>2800</span>
           </div>
         </div>
 

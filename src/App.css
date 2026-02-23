@@ -72,9 +72,10 @@ body {
   letter-spacing: 0.01em;
 }
 
-.ethos-logo-svg {
-  width: 22px;
-  height: 15px;
+.ethos-logomark {
+  /* The real Ethos "E" glyph — viewBox 512×512, scale down */
+  width: 20px;
+  height: 20px;
   color: var(--nav-text);
   flex-shrink: 0;
 }
@@ -377,49 +378,27 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.1rem;
   flex-shrink: 0;
+  min-width: 80px;
+  text-align: center;
 }
 
-.score-logo-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* The big score number — Ethos uses large serif */
+/* Big Literata number, faithful to Ethos score display */
 .score-number {
   font-family: 'Literata', Georgia, serif;
-  font-size: 3.2rem;
+  font-size: 3.4rem;
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -1px;
+  letter-spacing: -2px;
 }
 
-/* Ethos 3-bar icon next to score */
-.score-bars {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding-top: 6px;
-}
-
-.score-bar {
-  height: 4px;
-  border-radius: 2px;
-  background: currentColor;
-}
-
-.score-bar:nth-child(1) { width: 22px; }
-.score-bar:nth-child(2) { width: 16px; }
-.score-bar:nth-child(3) { width: 10px; }
-
-.score-level {
-  font-size: 0.7rem;
-  font-weight: 600;
+.score-tier-name {
+  font-size: 0.65rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  opacity: 0.85;
 }
 
 /* ── Body of profile card ── */
@@ -444,16 +423,53 @@ body {
   padding: 0.28rem 0.6rem;
 }
 
-/* Summary banner */
-.summary-banner {
-  padding: 0.55rem 0.85rem;
-  border-radius: var(--radius-sm);
-  text-align: center;
+/* Tier description banner */
+.tier-banner {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  background: rgba(31,33,38,.04);
+  border-left: 3px solid;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
-.summary-text {
-  font-size: 0.85rem;
-  font-weight: 600;
+.tier-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.tier-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+/* Score range bar */
+.score-range {
+  background: rgba(31,33,38,.08);
+  border-radius: 99px;
+  height: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.score-range-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width .5s ease;
+}
+
+.score-range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  padding: 0 2px;
 }
 
 /* Stats grid */

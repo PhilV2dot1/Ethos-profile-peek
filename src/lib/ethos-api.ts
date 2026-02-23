@@ -203,10 +203,35 @@ export async function fetchEthosProfile(det: DetectionResult): Promise<EthosProf
   };
 }
 
-export function generateSummary(score: number, xp: number, vouchCount: number): string {
-  if (score >= 2000) return vouchCount > 10 ? 'Profil exceptionnel, très soutenu par la communauté' : 'Profil exceptionnel';
-  if (score >= 1000) return 'Excellente réputation';
-  if (score >= 500)  return xp > 1000 ? 'Bonne réputation, profil actif' : 'Bonne réputation';
-  if (score >= 100)  return 'Réputation en construction';
-  return xp > 50 ? 'Nouveau profil mais actif' : 'Nouveau profil';
+/**
+ * Official Ethos credibility score tiers (whitepaper: ethos-mechanisms/credibility-score)
+ * Scale: 0 – 2800
+ */
+export interface EthosTier {
+  name: string;          // Official tier name from whitepaper
+  nameLabel: string;     // Display label (French)
+  min: number;
+  max: number;
+  color: string;         // UI accent color
+  description: string;   // One-line summary for the UI
+}
+
+export const ETHOS_TIERS: EthosTier[] = [
+  { name: 'untrusted',    nameLabel: 'Untrusted',    min: 0,    max: 799,  color: '#b72b38', description: 'Profil non vérifié ou signalé comme peu fiable' },
+  { name: 'questionable', nameLabel: 'Questionable', min: 800,  max: 1199, color: '#cc6b1a', description: 'Réputation incertaine, à aborder avec prudence' },
+  { name: 'neutral',      nameLabel: 'Neutral',      min: 1200, max: 1399, color: '#9e9c8d', description: 'Profil neutre — point de départ par défaut' },
+  { name: 'known',        nameLabel: 'Known',        min: 1400, max: 1599, color: '#1f21b6', description: 'Profil reconnu dans la communauté' },
+  { name: 'established',  nameLabel: 'Established',  min: 1600, max: 1799, color: '#1f21b6', description: 'Réputation bien établie et active' },
+  { name: 'reputable',    nameLabel: 'Reputable',    min: 1800, max: 1999, color: '#127f31', description: 'Très bonne réputation, soutenu par la communauté' },
+  { name: 'exemplary',    nameLabel: 'Exemplary',    min: 2000, max: 2199, color: '#127f31', description: 'Comportement exemplaire, modèle de confiance' },
+  { name: 'distinguished',nameLabel: 'Distinguished',min: 2200, max: 2399, color: '#0a6625', description: 'Profil distingué, très haut niveau de confiance' },
+  { name: 'revered',      nameLabel: 'Revered',      min: 2400, max: 2599, color: '#0a6625', description: 'Profil vénéré, référence dans l\'écosystème' },
+  { name: 'renowned',     nameLabel: 'Renowned',     min: 2600, max: 2800, color: '#06451a', description: 'Profil renommé — élite absolue d\'Ethos' },
+];
+
+export function getTier(score: number): EthosTier {
+  return (
+    ETHOS_TIERS.find((t) => score >= t.min && score <= t.max) ??
+    ETHOS_TIERS[0]
+  );
 }
