@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react';
+import type { SyntheticEvent } from 'react';
 import type { DetectionResult } from '../lib/ethos-api';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 
 const TYPE_COLORS: Record<string, string> = {
   address: '#627eea',
+  ens: '#5e74d4',
   x: '#000',
   discord: '#5865f2',
   farcaster: '#8a63d2',
@@ -18,7 +19,7 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 export function SearchForm({ query, onQueryChange, detected, loading, onSearch }: Props) {
-  function handleSubmit(e: FormEvent) {
+  function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
     onSearch();
   }
@@ -55,6 +56,7 @@ export function SearchForm({ query, onQueryChange, detected, loading, onSearch }
       <div className="format-hints">
         <span>X.com username</span>
         <span>ETH address (0x…)</span>
+        <span>ENS (vitalik.eth)</span>
         <span>Discord ID</span>
         <span>fid:123</span>
         <span>Profile ID</span>

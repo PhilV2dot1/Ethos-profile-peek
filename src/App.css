@@ -207,6 +207,19 @@ body {
   border-radius: 4px;
 }
 
+/* ===== ENS Badge ===== */
+
+.ens-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5e74d4;
+  background: #5e74d418;
+  border: 1px solid #5e74d440;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
 /* ===== Error Card ===== */
 
 .error-card {

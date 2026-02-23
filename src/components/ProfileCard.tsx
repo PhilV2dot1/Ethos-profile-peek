@@ -87,6 +87,13 @@ export function ProfileCard({ data }: Props) {
         </div>
       </div>
 
+      {/* ENS resolved badge */}
+      {data.resolvedFrom && (
+        <div className="ens-badge">
+          🔗 Résolu via ENS : {data.resolvedFrom}
+        </div>
+      )}
+
       {/* Summary */}
       <div className="summary-banner" style={{ backgroundColor: scoreColor(score) + '18' }}>
         <span className="summary-text" style={{ color: scoreColor(score) }}>
@@ -110,8 +117,8 @@ export function ProfileCard({ data }: Props) {
           <span className="stat-label">Vouches −</span>
         </div>
         <div className="stat-card">
-          <span className="stat-value">{activities.length}</span>
-          <span className="stat-label">Activités</span>
+          <span className="stat-value">{user.xpStreakDays}</span>
+          <span className="stat-label">🔥 Streak</span>
         </div>
       </div>
 
