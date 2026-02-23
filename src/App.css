@@ -1,116 +1,159 @@
-/* ===== Ethos Profile Peek — Theme ===== */
+/* ============================================================
+   Ethos Profile Peek — Design System
+   Colors sourced directly from app.ethos.network
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --ethos-blue: #1f21b6;
-  --ethos-blue-light: #4046c2;
-  --ethos-bg: #c1c0b6;
-  --ethos-card: #ffffff;
-  --ethos-border: #9e9c8d;
-  --ethos-text: rgba(31, 33, 38, 1);
-  --ethos-text-secondary: rgba(31, 33, 38, 0.65);
-  --ethos-success: #127f31;
-  --ethos-warning: #cc9a1a;
-  --ethos-error: #b72b38;
-  --radius: 12px;
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 6px 24px rgba(0, 0, 0, 0.12);
+  /* ── Ethos exact palette ── */
+  --bg:            #e8e6db;   /* page background (beige) */
+  --card:          #f5f4ee;   /* card surface */
+  --card-border:   #d4d2c8;   /* subtle card border */
+  --text:          #1f2126;   /* primary text */
+  --text-muted:    rgba(31,33,38,.55);
+  --text-secondary:rgba(31,33,38,.75);
+  --blue:          #1f21b6;   /* Ethos primary blue */
+  --blue-hover:    #3335cc;
+  --green:         #127f31;
+  --red:           #b72b38;
+  --amber:         #cc9a1a;
+  --nav-bg:        #1f2126;   /* top nav dark */
+  --nav-text:      #f5f4ee;
+
+  /* ── Misc ── */
+  --radius-sm: 6px;
+  --radius:    10px;
+  --radius-lg: 14px;
+  --shadow:    0 1px 4px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+  --shadow-lg: 0 2px 8px rgba(0,0,0,.10), 0 8px 32px rgba(0,0,0,.08);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ── Reset ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--ethos-bg);
-  color: var(--ethos-text);
+  background: var(--bg);
+  color: var(--text);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
   max-width: 640px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding-bottom: 3rem;
 }
 
-/* ===== Animations ===== */
+/* ============================================================
+   Nav bar
+   ============================================================ */
 
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.fade-in {
-  animation: fade-in 0.35s ease-out;
-}
-
-/* ===== App Layout ===== */
-
-.app {
+.ethos-nav {
+  background: var(--nav-bg);
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  height: 52px;
+  margin-bottom: 2rem;
 }
+
+.ethos-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--nav-text);
+  text-decoration: none;
+  font-family: 'Literata', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.ethos-logo-svg {
+  width: 22px;
+  height: 15px;
+  color: var(--nav-text);
+  flex-shrink: 0;
+}
+
+.ethos-nav-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245,244,238,.5);
+  border: 1px solid rgba(245,244,238,.2);
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+}
+
+/* ============================================================
+   Page header
+   ============================================================ */
 
 .app-header {
-  text-align: center;
-  padding: 1.5rem 0 0.5rem;
-}
-
-.app-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--ethos-text);
-  letter-spacing: -0.5px;
-}
-
-.logo-icon {
-  font-size: 1.8rem;
+  padding: 0 1.25rem 1.25rem;
 }
 
 .app-subtitle {
-  font-size: 0.95rem;
-  color: var(--ethos-text-secondary);
-  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
 
+/* ============================================================
+   Layout
+   ============================================================ */
+
 .app-main {
+  padding: 0 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
 .app-footer {
+  padding: 2rem 1.25rem 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
   text-align: center;
-  padding: 1.5rem 0;
-  font-size: 0.8rem;
-  color: var(--ethos-text-secondary);
 }
 
 .app-footer a {
-  color: var(--ethos-blue);
+  color: var(--blue);
   text-decoration: none;
   font-weight: 600;
 }
 
-.app-footer a:hover {
-  text-decoration: underline;
+.app-footer a:hover { text-decoration: underline; }
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes fade-up {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
 }
 
-/* ===== Search Card ===== */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.fade-in { animation: fade-up .3s ease-out; }
+
+/* ============================================================
+   Search card
+   ============================================================ */
 
 .search-card {
-  background: var(--ethos-card);
-  border-radius: var(--radius);
-  padding: 1.5rem;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
   box-shadow: var(--shadow);
-  border: 1px solid var(--ethos-border);
 }
 
 .input-row {
@@ -121,36 +164,34 @@ body {
 
 .search-input {
   width: 100%;
-  padding: 0.85rem 1rem;
-  font-size: 1rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
   font-family: inherit;
-  border: 2px solid var(--ethos-border);
-  border-radius: 8px;
+  background: #fff;
+  border: 1.5px solid var(--card-border);
+  border-radius: var(--radius-sm);
   outline: none;
-  transition: border-color 0.2s;
-  background: #fafaf7;
-  color: var(--ethos-text);
+  color: var(--text);
+  transition: border-color .15s;
 }
 
-.search-input:focus {
-  border-color: var(--ethos-blue);
-}
+.search-input:focus { border-color: var(--blue); }
 
 .search-input::placeholder {
-  color: var(--ethos-text-secondary);
+  color: var(--text-muted);
   font-size: 0.85rem;
 }
 
 .type-badge {
   position: absolute;
-  right: 0.75rem;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.7rem;
-  font-weight: 600;
+  right: 0.6rem;
+  padding: 0.18rem 0.55rem;
+  font-size: 0.65rem;
+  font-weight: 700;
   color: #fff;
   border-radius: 20px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   pointer-events: none;
 }
 
@@ -160,335 +201,344 @@ body {
   justify-content: center;
   gap: 0.4rem;
   width: 100%;
-  margin-top: 0.75rem;
-  padding: 0.85rem;
-  font-size: 1rem;
+  margin-top: 0.65rem;
+  padding: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 700;
   font-family: inherit;
   color: #fff;
-  background: var(--ethos-blue);
+  background: var(--blue);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background .15s;
+  letter-spacing: 0.01em;
 }
 
-.inspect-btn:hover:not(:disabled) {
-  background: var(--ethos-blue-light);
-}
-
-.inspect-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
+.inspect-btn:hover:not(:disabled) { background: var(--blue-hover); }
+.inspect-btn:disabled { opacity: .65; cursor: not-allowed; }
 
 .spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255,255,255,.35);
   border-top-color: #fff;
   border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+  animation: spin .55s linear infinite;
 }
 
 .format-hints {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
 }
 
 .format-hints span {
-  font-size: 0.7rem;
-  color: var(--ethos-text-secondary);
-  background: rgba(31, 33, 38, 0.06);
-  padding: 0.2rem 0.5rem;
+  font-size: 0.67rem;
+  color: var(--text-muted);
+  background: rgba(31,33,38,.06);
+  padding: 0.18rem 0.45rem;
   border-radius: 4px;
 }
 
-/* ===== ENS Badge ===== */
-
-.ens-badge {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #5e74d4;
-  background: #5e74d418;
-  border: 1px solid #5e74d440;
-  border-radius: 6px;
-  padding: 0.35rem 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-/* ===== Error Card ===== */
+/* ============================================================
+   Error
+   ============================================================ */
 
 .error-card {
-  background: var(--ethos-card);
-  border-radius: var(--radius);
+  background: var(--card);
+  border: 1.5px solid var(--red);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow: var(--shadow);
-  border: 2px solid var(--ethos-error);
   text-align: center;
+  animation: fade-up .3s ease-out;
 }
 
-.error-icon {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: 0.5rem;
-}
+.error-icon { font-size: 1.8rem; display: block; margin-bottom: 0.4rem; }
 
-.error-text {
-  color: var(--ethos-error);
-  font-weight: 500;
-  margin-bottom: 0.75rem;
-}
+.error-text { color: var(--red); font-weight: 500; font-size: 0.9rem; margin-bottom: 0.75rem; }
 
 .retry-btn {
-  padding: 0.5rem 1.5rem;
-  font-size: 0.85rem;
+  padding: 0.45rem 1.25rem;
+  font-size: 0.82rem;
   font-weight: 600;
   font-family: inherit;
-  color: var(--ethos-error);
+  color: var(--red);
   background: transparent;
-  border: 2px solid var(--ethos-error);
-  border-radius: 8px;
+  border: 1.5px solid var(--red);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all .15s;
 }
 
-.retry-btn:hover {
-  background: var(--ethos-error);
-  color: #fff;
-}
+.retry-btn:hover { background: var(--red); color: #fff; }
 
-/* ===== Idle Hint ===== */
+/* ============================================================
+   Idle hint
+   ============================================================ */
 
 .idle-hint {
   text-align: center;
-  padding: 2rem 1rem;
-  color: var(--ethos-text-secondary);
-  font-size: 0.9rem;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
 }
 
-/* ===== Profile Card ===== */
+/* ============================================================
+   Profile card
+   ============================================================ */
 
 .profile-card {
-  background: var(--ethos-card);
-  border-radius: var(--radius);
-  padding: 1.5rem;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  border: 2px solid var(--ethos-blue);
+  overflow: hidden;
+  animation: fade-up .35s ease-out;
 }
 
-.profile-header {
+/* ── Score banner (top area like Ethos) ── */
+.score-banner {
+  background: #fff;
+  padding: 1.5rem 1.5rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.profile-left {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  min-width: 0;
 }
 
 .avatar {
-  width: 64px;
-  height: 64px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
-  border: 3px solid var(--ethos-blue);
   object-fit: cover;
   flex-shrink: 0;
+  border: 2.5px solid var(--card-border);
 }
 
 .avatar-placeholder {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ethos-blue);
-  color: #fff;
-  font-size: 1.5rem;
-  font-weight: 700;
+  flex-shrink: 0;
 }
 
 .profile-info {
-  flex: 1;
   min-width: 0;
 }
 
 .display-name {
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: var(--ethos-text);
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+  word-break: break-word;
 }
 
 .username {
-  font-size: 0.8rem;
-  color: var(--ethos-text-secondary);
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
 }
 
 .ethos-link {
-  display: inline-block;
-  font-size: 0.75rem;
-  color: var(--ethos-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.72rem;
+  color: var(--blue);
   text-decoration: none;
   font-weight: 600;
-  margin-top: 0.2rem;
+  margin-top: 0.3rem;
 }
 
-.ethos-link:hover {
-  text-decoration: underline;
-}
+.ethos-link:hover { text-decoration: underline; }
 
-.score-circle {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  border: 4px solid;
+/* ── Score block (right side) ── */
+.score-block {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 0.25rem;
   flex-shrink: 0;
-  background: #fafaf7;
 }
 
-.score-value {
-  font-size: 1.5rem;
-  font-weight: 800;
+.score-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* The big score number — Ethos uses large serif */
+.score-number {
+  font-family: 'Literata', Georgia, serif;
+  font-size: 3.2rem;
+  font-weight: 700;
   line-height: 1;
+  letter-spacing: -1px;
 }
 
-.score-label {
-  font-size: 0.6rem;
-  color: var(--ethos-text-secondary);
-  text-transform: uppercase;
+/* Ethos 3-bar icon next to score */
+.score-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 6px;
+}
+
+.score-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.score-bar:nth-child(1) { width: 22px; }
+.score-bar:nth-child(2) { width: 16px; }
+.score-bar:nth-child(3) { width: 10px; }
+
+.score-level {
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
 }
 
-/* ===== Summary Banner ===== */
+/* ── Body of profile card ── */
+.profile-body {
+  padding: 1.1rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
+/* ENS badge */
+.ens-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #5e74d4;
+  background: #5e74d412;
+  border: 1px solid #5e74d432;
+  border-radius: 5px;
+  padding: 0.28rem 0.6rem;
+}
+
+/* Summary banner */
 .summary-banner {
-  padding: 0.65rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--radius-sm);
   text-align: center;
 }
 
 .summary-text {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
-/* ===== Stats Grid ===== */
-
+/* Stats grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 0.6rem;
 }
 
 .stat-card {
-  background: #fafaf7;
-  border-radius: 8px;
-  padding: 0.75rem 0.5rem;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.4rem;
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .stat-value {
   display: block;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  color: var(--ethos-text);
+  color: var(--text);
+  line-height: 1.1;
 }
 
-.stat-positive {
-  color: var(--ethos-success);
-}
-
-.stat-negative {
-  color: var(--ethos-error);
-}
+.stat-positive { color: var(--green); }
+.stat-negative { color: var(--red); }
 
 .stat-label {
   display: block;
-  font-size: 0.65rem;
-  color: var(--ethos-text-secondary);
+  font-size: 0.6rem;
+  color: var(--text-muted);
   text-transform: uppercase;
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
   margin-top: 0.2rem;
 }
 
-/* ===== Activities Section ===== */
-
-.activities-section {
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  padding-top: 1rem;
-}
+/* Activities */
+.activities-section { border-top: 1px solid var(--card-border); padding-top: 0.9rem; }
 
 .activities-section h3 {
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--ethos-text);
-  margin-bottom: 0.6rem;
+  color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
+  margin-bottom: 0.5rem;
 }
 
 .activity-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .activity-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 0.75rem;
-  background: #fafaf7;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  padding: 0.45rem 0.7rem;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
 }
 
-.activity-type {
-  font-weight: 600;
-}
+.activity-type { font-weight: 600; }
 
 .activity-date {
-  font-size: 0.75rem;
-  color: var(--ethos-text-secondary);
+  font-size: 0.72rem;
+  color: var(--text-muted);
 }
 
-/* ===== Responsive ===== */
+/* ============================================================
+   Responsive
+   ============================================================ */
 
 @media (max-width: 480px) {
-  #root {
-    padding: 1rem 0.75rem;
-  }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 
-  .app-title {
-    font-size: 1.5rem;
-  }
+  .score-number { font-size: 2.6rem; }
 
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .profile-header {
-    flex-wrap: wrap;
-  }
-
-  .score-circle {
-    width: 60px;
-    height: 60px;
-  }
-
-  .score-value {
-    font-size: 1.2rem;
-  }
+  .profile-left { gap: 0.75rem; }
+  .avatar, .avatar-placeholder { width: 56px; height: 56px; }
+  .avatar-placeholder { font-size: 1.3rem; }
 }
