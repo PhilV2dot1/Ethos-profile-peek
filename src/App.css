@@ -410,16 +410,92 @@ body {
 /* ── Gauge meter ── */
 .gauge-wrapper {
   background: #fff;
-  padding: 0.5rem 1.25rem 0.35rem;
+  padding: 0.75rem 1.25rem 0.5rem;
   border-bottom: 1px solid var(--card-border);
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 0;
 }
 
-.gauge-svg {
-  width: 100%;
-  max-width: 360px;
+/* Arc side */
+.gauge-arc-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.gauge-canvas {
   display: block;
+}
+
+.gauge-label-start,
+.gauge-label-end {
+  position: absolute;
+  bottom: 10px;
+  font-size: 9px;
+  font-family: 'Inter', sans-serif;
+  color: rgba(31,33,38,0.35);
+  font-weight: 500;
+}
+.gauge-label-start { left: 4px; }
+.gauge-label-end   { right: 4px; }
+
+/* Panel side */
+.gauge-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 0 18px;
+  border-left: 1px solid rgba(31,33,38,0.1);
+  min-width: 96px;
+}
+
+.gauge-panel-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.gauge-panel-ethos {
+  font-size: 7px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 3px;
+  opacity: 0.7;
+}
+
+.gauge-panel-score {
+  font-family: 'Literata', Georgia, serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.gauge-progress-track {
+  width: 72px;
+  height: 3px;
+  background: rgba(31,33,38,0.1);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.gauge-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.gauge-tier-pill {
+  font-size: 8px;
+  font-weight: 800;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 3px 10px;
+  border-radius: 99px;
 }
 
 /* ── Body of profile card ── */
