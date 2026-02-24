@@ -410,44 +410,53 @@ body {
 /* ── Gauge meter ── */
 .gauge-wrapper {
   background: #fff;
-  padding: 0.6rem 1rem 0.4rem;
+  padding: 0.5rem 0 0.35rem;
   border-bottom: 1px solid var(--card-border);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 20px;          /* space between arc and panel — no divider */
+  width: 100%;
+  overflow: hidden;
 }
 
-/* Arc side */
+/* Arc — 70% of wrapper width */
 .gauge-arc-wrap {
+  flex: 0 0 70%;
   position: relative;
-  flex-shrink: 0;
+  min-width: 0;
 }
 
+/* Canvas fills its container width naturally (ResizeObserver drives redraw) */
 .gauge-canvas {
   display: block;
+  width: 100%;
+  /* Height is set proportionally: roughly 55% of width, capped by viewport */
+  aspect-ratio: 1.85 / 1;
 }
 
 .gauge-label-start,
 .gauge-label-end {
   position: absolute;
-  bottom: 8px;
-  font-size: 8.5px;
+  bottom: 6px;
+  font-size: 9px;
   font-family: 'Inter', sans-serif;
   color: rgba(31,33,38,0.28);
   font-weight: 500;
   letter-spacing: 0.2px;
 }
-.gauge-label-start { left: 6px; }
-.gauge-label-end   { right: 6px; }
+.gauge-label-start { left: 8px; }
+.gauge-label-end   { right: 8px; }
 
-/* Panel — no border, pushed right */
+/* Panel — 30% of wrapper, vertically centered, left-aligned content */
 .gauge-panel {
+  flex: 0 0 30%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 3px;
-  min-width: 88px;
+  justify-content: center;
+  gap: 4px;
+  padding-left: 4px;
+  padding-right: 12px;
+  min-width: 0;
 }
 
 .gauge-panel-logo {
@@ -457,29 +466,28 @@ body {
 }
 
 .gauge-panel-ethos {
-  font-size: 7.5px;
+  font-size: 7px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
   letter-spacing: 2.5px;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
 .gauge-panel-score {
   font-family: 'Literata', Georgia, serif;
-  font-size: 44px;
+  font-size: clamp(32px, 6vw, 46px);
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -2.5px;
-  margin-top: 1px;
+  letter-spacing: -2px;
 }
 
 .gauge-progress-track {
-  width: 68px;
+  width: 100%;
+  max-width: 80px;
   height: 2.5px;
   background: rgba(31,33,38,0.08);
   border-radius: 99px;
   overflow: hidden;
-  margin-top: 2px;
 }
 
 .gauge-progress-fill {
@@ -489,14 +497,14 @@ body {
 }
 
 .gauge-tier-pill {
-  font-size: 8px;
+  font-size: 7.5px;
   font-weight: 800;
   font-family: 'Inter', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 3px 9px;
+  letter-spacing: 0.8px;
+  padding: 3px 8px;
   border-radius: 99px;
-  margin-top: 2px;
+  white-space: nowrap;
 }
 
 /* ── Body of profile card ── */
