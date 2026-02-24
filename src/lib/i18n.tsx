@@ -34,7 +34,7 @@ export const translations = {
     xpTrend:           'Tendance XP (30j)',
     last7days:         'Activité des 7 derniers jours',
     last7daysEmpty:    'Aucune activité cette semaine.',
-    recentActivity:    'Activités récentes',
+    recentActivity:    '20 dernières actions',
     totalActions:      'action',
     totalActionsPlural:'actions',
 
@@ -114,7 +114,7 @@ export const translations = {
     xpTrend:           'XP Trend (30d)',
     last7days:         'Activity — last 7 days',
     last7daysEmpty:    'No activity this week.',
-    recentActivity:    'Recent activity',
+    recentActivity:    'Last 20 actions',
     totalActions:      'action',
     totalActionsPlural:'actions',
 

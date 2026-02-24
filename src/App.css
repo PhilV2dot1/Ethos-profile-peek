@@ -429,8 +429,8 @@ body {
 .gauge-canvas {
   display: block;
   width: 100%;
-  /* Height is set proportionally: wide panoramic arc */
-  aspect-ratio: 2.2 / 1;
+  /* Height is set proportionally: very flat panoramic arc */
+  aspect-ratio: 2.6 / 1;
 }
 
 .gauge-label-start,
@@ -446,17 +446,17 @@ body {
 .gauge-label-start { left: 8px; }
 .gauge-label-end   { right: 8px; }
 
-/* Panel — 30% of wrapper, vertically centered, left-aligned content */
+/* Panel — 30% of wrapper, vertically + horizontally centered */
 .gauge-panel {
   flex: 0 0 30%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding-left: 4px;
-  padding-right: 12px;
+  gap: 5px;
+  padding: 0 10px;
   min-width: 0;
+  text-align: center;
 }
 
 .gauge-panel-logo {
@@ -482,9 +482,9 @@ body {
 }
 
 .gauge-progress-track {
-  width: 100%;
-  max-width: 80px;
-  height: 2.5px;
+  width: 80%;
+  max-width: 72px;
+  height: 2px;
   background: rgba(31,33,38,0.08);
   border-radius: 99px;
   overflow: hidden;

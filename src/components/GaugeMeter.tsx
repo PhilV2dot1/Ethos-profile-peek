@@ -9,9 +9,9 @@ const MAX     = 2800;
 const GAP_DEG = 1.4;
 
 // Arc geometry — computed from canvas width at draw time
-// Arc spans 200° (190°→390°=30°), pivot well below canvas bottom for flat look
-const A_START_DEG = 192;
-const A_END_DEG   = 348;
+// Arc spans 170° (185°→355°), pivot far below canvas for very flat look
+const A_START_DEG = 185;
+const A_END_DEG   = 355;
 const A_RANGE     = (A_END_DEG - A_START_DEG) * (Math.PI / 180);
 const A_START_RAD = A_START_DEG * (Math.PI / 180);
 
@@ -28,11 +28,11 @@ interface GeoParams {
 
 /** Derive geometry from actual canvas CSS width */
 function makeGeo(cssW: number, cssH: number): GeoParams {
-  // Radius fills ~55% of width; pivot sits below canvas bottom for flat arc
-  const r     = cssW * 0.47;
+  // Radius fills canvas width; pivot far below → very flat arc
+  const r     = cssW * 0.50;
   const thick = Math.max(5, cssW * 0.026);   // thin modern ring
   const cx    = cssW / 2;
-  const cy    = cssH + cssW * 0.06;           // pivot below canvas → flat arc
+  const cy    = cssH + cssW * 0.16;           // pivot well below → extreme flat arc
   return { cx, cy, r, thick };
 }
 
@@ -196,10 +196,10 @@ export function GaugeMeter({ score }: Props) {
         <span className="gauge-label-end">2800</span>
       </div>
 
-      {/* ── Score panel — 30% width ── */}
+      {/* ── Score panel — 30% width, centered ── */}
       <div className="gauge-panel">
         <div className="gauge-panel-logo">
-          <EthosE color={color} size={18} />
+          <EthosE color={color} size={14} />
           <span className="gauge-panel-ethos" style={{ color }}>ETHOS</span>
         </div>
         <div className="gauge-panel-score" style={{ color }}>{score}</div>
