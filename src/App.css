@@ -429,8 +429,8 @@ body {
 .gauge-canvas {
   display: block;
   width: 100%;
-  /* Height: pivot near bottom, radius > height → flat arc fully visible */
-  aspect-ratio: 2.4 / 1;
+  /* Height: pivot near bottom, radius derived from height */
+  aspect-ratio: 1.6 / 1;
 }
 
 .gauge-label-start,

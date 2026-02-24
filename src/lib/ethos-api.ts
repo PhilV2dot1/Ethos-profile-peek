@@ -194,22 +194,47 @@ export async function fetchEthosProfile(det: DetectionResult): Promise<EthosProf
   const encodedKey = encodeURIComponent(canonicalKey);
   const activityParams = ACTIVITY_TYPES.map((t) => `activityType=${t}`).join('&');
 
-  // Step 3: parallel fetch of score, vouches, activities, XP timeline
-  const [scoreRes, vouchesRes, activitiesRes, xpTimelineRes] = await Promise.allSettled([
+  // Step 3: parallel fetch of score, vouches, activities, XP timelines (seasons 1+2+3)
+  const [scoreRes, vouchesRes, activitiesRes, xpS1Res, xpS2Res, xpS3Res] = await Promise.allSettled([
     ethosGet(`${BASE_URL}/score/userkey?userkey=${encodedKey}`),
     ethosPost(`${BASE_URL}/vouches`, { subjectUserkeys: [canonicalKey], limit: 50 }),
     ethosGet(`${BASE_URL}/activities/userkey?userkey=${encodedKey}&${activityParams}&limit=20`),
     ethosGet(`${BASE_URL}/xp/user/${encodedKey}/season/1/timeline?granularity=day`),
+    ethosGet(`${BASE_URL}/xp/user/${encodedKey}/season/2/timeline?granularity=day`),
+    ethosGet(`${BASE_URL}/xp/user/${encodedKey}/season/3/timeline?granularity=day`),
   ]);
 
-  // XP timeline: API returns an object indexed by number → convert to array, keep last 30 days
+  // XP timeline: merge all seasons by date, recompute cumulative from combined daily XP
+  function toEntries(res: PromiseSettledResult<unknown>): XpDataPoint[] {
+    if (res.status !== 'fulfilled') return [];
+    const raw = res.value;
+    return Array.isArray(raw) ? raw : Object.values(raw as Record<string, XpDataPoint>);
+  }
+
   let xpTimeline: XpDataPoint[] = [];
-  if (xpTimelineRes.status === 'fulfilled') {
-    const raw = xpTimelineRes.value;
-    const entries: XpDataPoint[] = Array.isArray(raw)
-      ? raw
-      : Object.values(raw as Record<string, XpDataPoint>);
-    xpTimeline = entries.slice(-30);
+  {
+    // Aggregate daily XP across all seasons keyed by date string
+    const dailyXp: Record<string, number> = {};
+    for (const entry of [...toEntries(xpS1Res), ...toEntries(xpS2Res), ...toEntries(xpS3Res)]) {
+      const day = entry.time.slice(0, 10);
+      dailyXp[day] = (dailyXp[day] ?? 0) + (entry.xp ?? 0);
+    }
+    // Sort dates and recompute cumulative
+    const sortedDays = Object.keys(dailyXp).sort();
+    let cumul = 0;
+    const all: XpDataPoint[] = sortedDays.map((day) => {
+      cumul += dailyXp[day];
+      return { time: `${day}T00:00:00.000Z`, xp: dailyXp[day], cumulativeXp: cumul };
+    });
+    // Keep last 30 days that have data (non-zero xp) plus surrounding context
+    const withXp = all.filter((p) => p.xp > 0);
+    if (withXp.length > 0) {
+      const lastActiveIdx = all.indexOf(withXp[withXp.length - 1]);
+      const startIdx = Math.max(0, lastActiveIdx - 29);
+      xpTimeline = all.slice(startIdx);
+    } else {
+      xpTimeline = all.slice(-30);
+    }
   }
 
   return {

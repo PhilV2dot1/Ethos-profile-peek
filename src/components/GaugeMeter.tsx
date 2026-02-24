@@ -8,9 +8,9 @@ interface Props {
 const MAX     = 2800;
 const GAP_DEG = 1.4;
 
-// Arc geometry — sweep 160° centred on top (200°→340°)
-const A_START_DEG = 200;
-const A_END_DEG   = 340;
+// Arc geometry — sweep 160° (205°→345°), wide flat arc
+const A_START_DEG = 205;
+const A_END_DEG   = 335;
 const A_RANGE     = (A_END_DEG - A_START_DEG) * (Math.PI / 180);
 const A_START_RAD = A_START_DEG * (Math.PI / 180);
 
@@ -27,10 +27,13 @@ interface GeoParams {
 
 /** Derive geometry from actual canvas CSS width */
 function makeGeo(cssW: number, cssH: number): GeoParams {
-  // Pivot sits at bottom-centre of canvas, radius >> height → flat arc
+  // Pivot fixed at bottom-centre inside canvas.
+  // Radius chosen so the arc crown (270°) just fits inside top margin.
+  // At 270°: arcTopY = cy - r. We want arcTopY = cssH * 0.08 (8% from top)
+  // → r = cy - cssH*0.08 where cy = cssH * 0.95 (5% from bottom)
+  const cy    = cssH * 0.95;
+  const r     = cy - cssH * 0.08;            // arc crown 8% from top, needle base visible
   const cx    = cssW / 2;
-  const cy    = cssH * 0.92;                  // pivot near bottom edge, inside canvas
-  const r     = cssH * 1.35;                  // radius larger than canvas height → flat
   const thick = Math.max(5, cssW * 0.026);    // thin modern ring
   return { cx, cy, r, thick };
 }
