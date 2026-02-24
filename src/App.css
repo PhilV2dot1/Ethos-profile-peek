@@ -429,8 +429,8 @@ body {
 .gauge-canvas {
   display: block;
   width: 100%;
-  /* Height is set proportionally: very flat panoramic arc */
-  aspect-ratio: 2.6 / 1;
+  /* Height: pivot near bottom, radius > height → flat arc fully visible */
+  aspect-ratio: 2.4 / 1;
 }
 
 .gauge-label-start,

@@ -8,10 +8,9 @@ interface Props {
 const MAX     = 2800;
 const GAP_DEG = 1.4;
 
-// Arc geometry — computed from canvas width at draw time
-// Arc spans 170° (185°→355°), pivot far below canvas for very flat look
-const A_START_DEG = 185;
-const A_END_DEG   = 355;
+// Arc geometry — sweep 160° centred on top (200°→340°)
+const A_START_DEG = 200;
+const A_END_DEG   = 340;
 const A_RANGE     = (A_END_DEG - A_START_DEG) * (Math.PI / 180);
 const A_START_RAD = A_START_DEG * (Math.PI / 180);
 
@@ -28,11 +27,11 @@ interface GeoParams {
 
 /** Derive geometry from actual canvas CSS width */
 function makeGeo(cssW: number, cssH: number): GeoParams {
-  // Radius fills canvas width; pivot far below → very flat arc
-  const r     = cssW * 0.50;
-  const thick = Math.max(5, cssW * 0.026);   // thin modern ring
+  // Pivot sits at bottom-centre of canvas, radius >> height → flat arc
   const cx    = cssW / 2;
-  const cy    = cssH + cssW * 0.16;           // pivot well below → extreme flat arc
+  const cy    = cssH * 0.92;                  // pivot near bottom edge, inside canvas
+  const r     = cssH * 1.35;                  // radius larger than canvas height → flat
+  const thick = Math.max(5, cssW * 0.026);    // thin modern ring
   return { cx, cy, r, thick };
 }
 
