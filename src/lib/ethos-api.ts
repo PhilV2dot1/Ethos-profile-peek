@@ -130,10 +130,18 @@ export interface EthosActivity {
   data: {
     id: number;
     createdAt?: number;
-    score?: string;
+    score?: string;      // 'positive' | 'neutral' | 'negative' (reviews)
     comment?: string;
+    author?: string;
+    authorProfileId?: number;
     [key: string]: unknown;
   };
+}
+
+export interface XpDataPoint {
+  time: string;        // ISO date string
+  xp: number;          // XP earned that day
+  cumulativeXp: number;
 }
 
 export interface EthosProfileData {
@@ -141,12 +149,13 @@ export interface EthosProfileData {
   score: EthosScore | null;
   vouches: { values: EthosVouch[]; total: number };
   activities: EthosActivity[];
-  resolvedFrom?: string; // e.g. "vitalik.eth → 0xd8dA…"
+  xpTimeline: XpDataPoint[]; // last 30 data points
+  resolvedFrom?: string;
 }
 
 // ---- Main fetch ----
 
-const ACTIVITY_TYPES = ['VOUCH', 'UNVOUCH', 'REVIEW', 'ATTESTATION', 'VOTE', 'REPLY'];
+const ACTIVITY_TYPES = ['VOUCH', 'UNVOUCH', 'REVIEW', 'ATTESTATION', 'VOTE', 'REPLY', 'XP_TIP', 'SLASH'];
 
 export async function fetchEthosProfile(det: DetectionResult): Promise<EthosProfileData> {
   let resolvedFrom: string | undefined;
@@ -185,12 +194,23 @@ export async function fetchEthosProfile(det: DetectionResult): Promise<EthosProf
   const encodedKey = encodeURIComponent(canonicalKey);
   const activityParams = ACTIVITY_TYPES.map((t) => `activityType=${t}`).join('&');
 
-  // Step 3: parallel fetch of score, vouches, activities
-  const [scoreRes, vouchesRes, activitiesRes] = await Promise.allSettled([
+  // Step 3: parallel fetch of score, vouches, activities, XP timeline
+  const [scoreRes, vouchesRes, activitiesRes, xpTimelineRes] = await Promise.allSettled([
     ethosGet(`${BASE_URL}/score/userkey?userkey=${encodedKey}`),
     ethosPost(`${BASE_URL}/vouches`, { subjectUserkeys: [canonicalKey], limit: 50 }),
-    ethosGet(`${BASE_URL}/activities/userkey?userkey=${encodedKey}&${activityParams}&limit=3`),
+    ethosGet(`${BASE_URL}/activities/userkey?userkey=${encodedKey}&${activityParams}&limit=20`),
+    ethosGet(`${BASE_URL}/xp/user/${encodedKey}/season/1/timeline?granularity=day`),
   ]);
+
+  // XP timeline: API returns an object indexed by number → convert to array, keep last 30 days
+  let xpTimeline: XpDataPoint[] = [];
+  if (xpTimelineRes.status === 'fulfilled') {
+    const raw = xpTimelineRes.value;
+    const entries: XpDataPoint[] = Array.isArray(raw)
+      ? raw
+      : Object.values(raw as Record<string, XpDataPoint>);
+    xpTimeline = entries.slice(-30);
+  }
 
   return {
     user,
@@ -199,6 +219,7 @@ export async function fetchEthosProfile(det: DetectionResult): Promise<EthosProf
     activities: activitiesRes.status === 'fulfilled'
       ? (Array.isArray(activitiesRes.value) ? activitiesRes.value : [])
       : [],
+    xpTimeline,
     resolvedFrom,
   };
 }
