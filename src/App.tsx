@@ -2,12 +2,10 @@ import { useEthosProfile } from './hooks/useEthosProfile';
 import { SearchForm } from './components/SearchForm';
 import { ProfileCard } from './components/ProfileCard';
 import { ErrorMessage } from './components/ErrorMessage';
+import { LangProvider, useLang, type Lang } from './lib/i18n';
 import './App.css';
 
-/**
- * Official Ethos logomark — the stylised "E" with offset horizontal bars,
- * extracted from https://app.ethos.network/favicon.svg
- */
+/** Official Ethos logomark — stylised "E" from favicon.svg */
 function EthosLogomark() {
   return (
     <svg
@@ -27,8 +25,27 @@ function EthosLogomark() {
   );
 }
 
-export default function App() {
+/** Language toggle button */
+function LangToggle() {
+  const { lang, setLang } = useLang();
+  const next: Lang = lang === 'fr' ? 'en' : 'fr';
+  return (
+    <button
+      className="lang-toggle"
+      onClick={() => setLang(next)}
+      aria-label={`Switch to ${next.toUpperCase()}`}
+      title={`Switch to ${next.toUpperCase()}`}
+    >
+      <span className={lang === 'fr' ? 'lang-active' : ''}>FR</span>
+      <span className="lang-sep">/</span>
+      <span className={lang === 'en' ? 'lang-active' : ''}>EN</span>
+    </button>
+  );
+}
+
+function AppInner() {
   const { query, setQuery, detected, profile, state, error, search } = useEthosProfile();
+  const { t } = useLang();
 
   return (
     <div className="app">
@@ -43,11 +60,14 @@ export default function App() {
           <EthosLogomark />
           <span>Ethos</span>
         </a>
-        <span className="ethos-nav-tag">Profile Peek</span>
+        <div className="ethos-nav-right">
+          <span className="ethos-nav-tag">{t.profilePeek}</span>
+          <LangToggle />
+        </div>
       </nav>
 
       <header className="app-header">
-        <p className="app-subtitle">Inspectez n'importe quel profil Ethos Network</p>
+        <p className="app-subtitle">{t.inspectSubtitle}</p>
       </header>
 
       <main className="app-main">
@@ -64,19 +84,27 @@ export default function App() {
 
         {state === 'idle' && (
           <div className="idle-hint">
-            <p>Entrez un identifiant ci-dessus pour inspecter un profil Ethos.</p>
+            <p>{t.idleHint}</p>
           </div>
         )}
       </main>
 
       <footer className="app-footer">
         <p>
-          Propulsé par l'API publique{' '}
+          {t.poweredBy}{' '}
           <a href="https://developers.ethos.network" target="_blank" rel="noopener noreferrer">
             Ethos Network
           </a>
         </p>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <LangProvider>
+      <AppInner />
+    </LangProvider>
   );
 }

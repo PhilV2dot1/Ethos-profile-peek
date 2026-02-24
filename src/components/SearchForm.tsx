@@ -1,5 +1,6 @@
 import type { SyntheticEvent } from 'react';
 import type { DetectionResult } from '../lib/ethos-api';
+import { useLang } from '../lib/i18n';
 
 interface Props {
   query: string;
@@ -19,6 +20,8 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 export function SearchForm({ query, onQueryChange, detected, loading, onSearch }: Props) {
+  const { t } = useLang();
+
   function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
     onSearch();
@@ -30,7 +33,7 @@ export function SearchForm({ query, onQueryChange, detected, loading, onSearch }
         <input
           type="text"
           className="search-input"
-          placeholder="vitalik.eth, @elonmusk, 0x1234…, fid:12345"
+          placeholder={t.searchPlaceholder}
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           disabled={loading}
@@ -45,21 +48,21 @@ export function SearchForm({ query, onQueryChange, detected, loading, onSearch }
         )}
       </div>
 
-      <button type="submit" className="inspect-btn" disabled={loading}>
+      <button type="submit" className="inspect-btn" disabled={loading || !query.trim()}>
         {loading ? (
-          <span className="spinner" />
+          <><span className="spinner" /> {t.inspecting}</>
         ) : (
-          '🔍 Inspect'
+          t.inspectBtn
         )}
       </button>
 
       <div className="format-hints">
-        <span>X.com username</span>
-        <span>ETH address (0x…)</span>
-        <span>ENS (vitalik.eth)</span>
-        <span>Discord ID</span>
-        <span>fid:123</span>
-        <span>Profile ID</span>
+        <span>{t.hintXcom}</span>
+        <span>{t.hintAddress}</span>
+        <span>{t.hintEns}</span>
+        <span>{t.hintDiscord}</span>
+        <span>{t.hintFarcaster}</span>
+        <span>{t.hintProfileId}</span>
       </div>
     </form>
   );
