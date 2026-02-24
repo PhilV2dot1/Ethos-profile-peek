@@ -606,29 +606,103 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* ── 7-day summary pills ── */
+/* ── Sections (shared) ── */
 .activities-section {
   border-top: 1px solid var(--card-border);
   padding-top: 0.9rem;
 }
 
-.summary-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
+/* ── Weekly activity summary ── */
+.week-summary {
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
-.summary-pill {
-  display: inline-flex;
+.week-summary-header {
+  display: flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 0.72rem;
+  justify-content: space-between;
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+  background: rgba(31,33,38,.025);
+}
+
+.week-total {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.week-period {
+  font-size: 0.65rem;
   font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.week-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.week-row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto 28px;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid rgba(31,33,38,.05);
+  transition: background .1s;
+}
+
+.week-row:last-child { border-bottom: none; }
+
+.week-row:hover { background: rgba(31,33,38,.03); }
+
+.week-row-icon {
+  font-size: 0.82rem;
+  text-align: center;
+  line-height: 1;
+}
+
+.week-row-label {
+  font-size: 0.78rem;
+  font-weight: 500;
   color: var(--text-secondary);
-  background: rgba(31,33,38,.06);
-  border: 1px solid rgba(31,33,38,.1);
-  border-radius: 20px;
-  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.week-bar-wrap {
+  height: 4px;
+  background: rgba(31,33,38,.07);
+  border-radius: 99px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.week-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width .4s ease;
+}
+
+.week-row-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-empty {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 0.4rem 0;
 }
 
 /* ── Activity list ── */
