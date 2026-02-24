@@ -410,12 +410,12 @@ body {
 /* ── Gauge meter ── */
 .gauge-wrapper {
   background: #fff;
-  padding: 0.75rem 1.25rem 0.5rem;
+  padding: 0.6rem 1rem 0.4rem;
   border-bottom: 1px solid var(--card-border);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
+  gap: 20px;          /* space between arc and panel — no divider */
 }
 
 /* Arc side */
@@ -431,55 +431,55 @@ body {
 .gauge-label-start,
 .gauge-label-end {
   position: absolute;
-  bottom: 10px;
-  font-size: 9px;
+  bottom: 8px;
+  font-size: 8.5px;
   font-family: 'Inter', sans-serif;
-  color: rgba(31,33,38,0.35);
+  color: rgba(31,33,38,0.28);
   font-weight: 500;
+  letter-spacing: 0.2px;
 }
-.gauge-label-start { left: 4px; }
-.gauge-label-end   { right: 4px; }
+.gauge-label-start { left: 6px; }
+.gauge-label-end   { right: 6px; }
 
-/* Panel side */
+/* Panel — no border, pushed right */
 .gauge-panel {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 0 0 0 18px;
-  border-left: 1px solid rgba(31,33,38,0.1);
-  min-width: 96px;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 88px;
 }
 
 .gauge-panel-logo {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 5px;
 }
 
 .gauge-panel-ethos {
-  font-size: 7px;
+  font-size: 7.5px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
-  letter-spacing: 3px;
-  opacity: 0.7;
+  letter-spacing: 2.5px;
+  opacity: 0.65;
 }
 
 .gauge-panel-score {
   font-family: 'Literata', Georgia, serif;
-  font-size: 40px;
+  font-size: 44px;
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -2px;
+  letter-spacing: -2.5px;
+  margin-top: 1px;
 }
 
 .gauge-progress-track {
-  width: 72px;
-  height: 3px;
-  background: rgba(31,33,38,0.1);
+  width: 68px;
+  height: 2.5px;
+  background: rgba(31,33,38,0.08);
   border-radius: 99px;
   overflow: hidden;
+  margin-top: 2px;
 }
 
 .gauge-progress-fill {
@@ -493,9 +493,10 @@ body {
   font-weight: 800;
   font-family: 'Inter', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  padding: 3px 10px;
+  letter-spacing: 1px;
+  padding: 3px 9px;
   border-radius: 99px;
+  margin-top: 2px;
 }
 
 /* ── Body of profile card ── */

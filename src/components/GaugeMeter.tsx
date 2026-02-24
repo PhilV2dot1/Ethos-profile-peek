@@ -5,158 +5,139 @@ interface Props {
   score: number;
 }
 
-// ── Canvas constants ──────────────────────────────────────────────────────────
-const DPR      = typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 2) : 2;
-const CW       = 240;   // canvas CSS width (px)
-const CH       = 130;   // canvas CSS height
-const CX       = CW / 2;
-const CY       = CH - 2; // pivot near bottom → flat arc
-const R_OUT    = 112;   // outer radius of arc ring
-const R_IN     = 88;    // inner radius  → ring thickness = 24px
-const GAP_DEG  = 1.2;   // degrees of gap between tier segments
+// ── Canvas geometry ───────────────────────────────────────────────────────────
+const DPR     = typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 2) : 2;
+const CW      = 230;    // canvas CSS width
+const CH      = 118;    // canvas CSS height — compact
+const CX      = CW / 2;
+const CY      = CH + 18; // pivot well below canvas → very flat arc
+const R       = 148;    // large radius → wide flat arc
+const THICK   = 10;     // ring half-thickness (total ring = 20px diameter)
+const R_OUT   = R + THICK;
+const R_IN    = R - THICK;
+const GAP_DEG = 1.0;    // visual gap between tier segments (degrees)
+const MAX     = 2800;
 
-// Arc spans 200° total: from 190° to 350° (0° = right, clockwise)
-// This gives a wide flat horseshoe shape
-const A_START  = 190 * (Math.PI / 180);
-const A_END    = 350 * (Math.PI / 180);
-const A_RANGE  = A_END - A_START; // 160° in radians
-const MAX      = 2800;
+// Arc: 210° sweep, starting lower-left, ending lower-right
+// With pivot below canvas, this creates a very flat wide horseshoe
+const A_START = 195 * (Math.PI / 180);
+const A_END   = 345 * (Math.PI / 180);
+const A_RANGE = A_END - A_START;
 
 function scoreToRad(s: number): number {
   return A_START + (Math.max(0, Math.min(s, MAX)) / MAX) * A_RANGE;
 }
 
-function drawGauge(
-  canvas: HTMLCanvasElement,
-  score: number,
-) {
+function drawGauge(canvas: HTMLCanvasElement, score: number) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  // Scale for retina
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
   ctx.scale(DPR, DPR);
 
-  const gapRad = GAP_DEG * (Math.PI / 180);
-  const halfGap = gapRad / 2;
+  const halfGap = (GAP_DEG * Math.PI / 180) / 2;
 
-  // Draw each tier segment
+  // ── Tier ring segments ────────────────────────────────────────────────────
   ETHOS_TIERS.forEach((tier) => {
     const aMin = scoreToRad(tier.min);
     const aMax = scoreToRad(tier.max);
-
-    // Apply gap: inset from each edge (but not at the very start/end of the full arc)
+    // Gap: skip at hard ends of the full arc
     const a0 = tier.min === 0   ? aMin : aMin + halfGap;
     const a1 = tier.max === MAX ? aMax : aMax - halfGap;
-
     if (a1 <= a0) return;
 
-    // Determine if this segment is fully active, partially active, or inactive
-    const isFullyActive  = score >= tier.max;
-    const isPartlyActive = score > tier.min && score < tier.max;
-    const isInactive     = score <= tier.min;
+    const isActive   = score >= tier.max;
+    const isPartial  = score > tier.min && score < tier.max;
 
-    // ── Background (dimmed) ring segment ──────────────────────────────
+    // Dimmed background
     ctx.beginPath();
     ctx.arc(CX, CY, R_OUT, a0, a1);
     ctx.arc(CX, CY, R_IN,  a1, a0, true);
     ctx.closePath();
-    ctx.fillStyle = tier.color;
-    ctx.globalAlpha = 0.18;
+    ctx.fillStyle   = tier.color;
+    ctx.globalAlpha = 0.15;
     ctx.fill();
     ctx.globalAlpha = 1;
 
-    if (isInactive) return;
+    if (!isActive && !isPartial) return;
 
-    // ── Active (lit) portion ──────────────────────────────────────────
-    const aActive = isFullyActive ? a1 : scoreToRad(score);
-
+    // Active fill
+    const aFill = isActive ? a1 : scoreToRad(score);
     ctx.beginPath();
-    ctx.arc(CX, CY, R_OUT, a0, aActive);
-    ctx.arc(CX, CY, R_IN,  aActive, a0, true);
+    ctx.arc(CX, CY, R_OUT, a0, aFill);
+    ctx.arc(CX, CY, R_IN,  aFill, a0, true);
     ctx.closePath();
     ctx.fillStyle = tier.color;
-    ctx.globalAlpha = 1;
     ctx.fill();
 
-    // Subtle top shine on active segment
-    if (!isInactive) {
-      const grad = ctx.createRadialGradient(CX, CY, R_IN, CX, CY, R_OUT);
-      grad.addColorStop(0,   'rgba(255,255,255,0.0)');
-      grad.addColorStop(0.6, 'rgba(255,255,255,0.0)');
-      grad.addColorStop(1,   'rgba(255,255,255,0.18)');
-      ctx.beginPath();
-      ctx.arc(CX, CY, R_OUT, a0, aActive);
-      ctx.arc(CX, CY, R_IN,  aActive, a0, true);
-      ctx.closePath();
-      ctx.fillStyle = grad;
-      ctx.fill();
-    }
-
-    // Partial: draw a clean edge line at the score boundary
-    if (isPartlyActive) {
-      ctx.beginPath();
-      const ex = CX + Math.cos(aActive) * R_OUT;
-      const ey = CY + Math.sin(aActive) * R_OUT;
-      const ix = CX + Math.cos(aActive) * R_IN;
-      const iy = CY + Math.sin(aActive) * R_IN;
-      ctx.moveTo(ex, ey);
-      ctx.lineTo(ix, iy);
-      ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-    }
+    // Inner edge highlight (thin bright line on top arc edge for depth)
+    const grad = ctx.createRadialGradient(CX, CY, R_IN + 1, CX, CY, R_OUT - 1);
+    grad.addColorStop(0,   'rgba(255,255,255,0.22)');
+    grad.addColorStop(0.4, 'rgba(255,255,255,0.06)');
+    grad.addColorStop(1,   'rgba(0,0,0,0.08)');
+    ctx.beginPath();
+    ctx.arc(CX, CY, R_OUT, a0, aFill);
+    ctx.arc(CX, CY, R_IN,  aFill, a0, true);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
   });
 
-  // ── Needle ───────────────────────────────────────────────────────────────
-  const needleAngle = scoreToRad(score);
-  const needleLen   = R_IN - 8;
-  const nx = CX + Math.cos(needleAngle) * needleLen;
-  const ny = CY + Math.sin(needleAngle) * needleLen;
-
+  // ── Triangular needle ─────────────────────────────────────────────────────
   const tier  = getTier(score);
   const color = tier.color;
+  const angle = scoreToRad(score);
 
-  // Needle line
-  ctx.beginPath();
-  ctx.moveTo(CX, CY);
-  ctx.lineTo(nx, ny);
-  ctx.strokeStyle = color;
-  ctx.lineWidth   = 2.5;
-  ctx.lineCap     = 'round';
-  ctx.shadowColor = 'rgba(0,0,0,0.3)';
-  ctx.shadowBlur  = 4;
-  ctx.stroke();
-  ctx.shadowBlur  = 0;
+  // Tip: just inside the inner ring
+  const tipR  = R_IN - 6;
+  const tipX  = CX + Math.cos(angle) * tipR;
+  const tipY  = CY + Math.sin(angle) * tipR;
 
-  // Pivot circle
+  // Base: two points perpendicular to needle direction, at pivot
+  const baseW  = 4.5; // half-width of base
+  const perpA  = angle + Math.PI / 2;
+  const b1x    = CX + Math.cos(perpA) * baseW;
+  const b1y    = CY + Math.sin(perpA) * baseW;
+  const b2x    = CX - Math.cos(perpA) * baseW;
+  const b2y    = CY - Math.sin(perpA) * baseW;
+
+  // Drop shadow
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.22)';
+  ctx.shadowBlur  = 6;
+  ctx.shadowOffsetY = 1;
   ctx.beginPath();
-  ctx.arc(CX, CY, 6, 0, Math.PI * 2);
-  ctx.fillStyle = '#fff';
+  ctx.moveTo(tipX, tipY);
+  ctx.lineTo(b1x, b1y);
+  ctx.lineTo(b2x, b2y);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.restore();
+
+  // Pivot ring (white fill, tier-colored stroke)
+  ctx.beginPath();
+  ctx.arc(CX, CY, 5.5, 0, Math.PI * 2);
+  ctx.fillStyle   = '#ffffff';
   ctx.fill();
   ctx.strokeStyle = color;
-  ctx.lineWidth   = 2;
+  ctx.lineWidth   = 1.8;
   ctx.stroke();
 
+  // Pivot center dot
   ctx.beginPath();
-  ctx.arc(CX, CY, 2.5, 0, Math.PI * 2);
+  ctx.arc(CX, CY, 2, 0, Math.PI * 2);
   ctx.fillStyle = color;
   ctx.fill();
 
   ctx.restore();
 }
 
-/** Official Ethos "E" logomark — same path as in App.tsx */
-function EthosE({ color }: { color: string }) {
+/** Official Ethos "E" mark — the offset-bars path from favicon.svg */
+function EthosE({ color, size = 24 }: { color: string; size?: number }) {
   return (
-    <svg
-      width="28" height="28"
-      viewBox="0 0 512 512"
-      fill="none"
-      aria-hidden="true"
-      style={{ display: 'block' }}
-    >
+    <svg width={size} height={size} viewBox="0 0 512 512" fill="none" aria-hidden="true">
       <path
         fill={color}
         fillRule="evenodd"
@@ -176,8 +157,8 @@ export function GaugeMeter({ score }: Props) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    canvas.width  = CW * DPR;
-    canvas.height = CH * DPR;
+    canvas.width        = CW * DPR;
+    canvas.height       = CH * DPR;
     canvas.style.width  = `${CW}px`;
     canvas.style.height = `${CH}px`;
     drawGauge(canvas, score);
@@ -185,34 +166,27 @@ export function GaugeMeter({ score }: Props) {
 
   return (
     <div className="gauge-wrapper" aria-label={`Score Ethos: ${score} — ${tier.nameLabel}`}>
-      {/* ── Arc canvas ── */}
+
+      {/* ── Arc ── */}
       <div className="gauge-arc-wrap">
         <canvas ref={canvasRef} className="gauge-canvas" />
-        {/* Range labels */}
         <span className="gauge-label-start">0</span>
         <span className="gauge-label-end">2800</span>
       </div>
 
-      {/* ── Score panel ── */}
-      <div className="gauge-panel" style={{ borderLeftColor: 'rgba(31,33,38,0.1)' }}>
+      {/* ── Score panel (no divider) ── */}
+      <div className="gauge-panel">
         <div className="gauge-panel-logo">
-          <EthosE color={color} />
+          <EthosE color={color} size={22} />
           <span className="gauge-panel-ethos" style={{ color }}>ETHOS</span>
         </div>
-        <div className="gauge-panel-score" style={{ color }}>
-          {score}
-        </div>
-        {/* Progress bar */}
+        <div className="gauge-panel-score" style={{ color }}>{score}</div>
         <div className="gauge-progress-track">
-          <div
-            className="gauge-progress-fill"
-            style={{ width: `${pct * 100}%`, backgroundColor: color }}
-          />
+          <div className="gauge-progress-fill" style={{ width: `${pct * 100}%`, backgroundColor: color }} />
         </div>
-        {/* Tier pill */}
         <div
           className="gauge-tier-pill"
-          style={{ color, backgroundColor: `${color}1a`, border: `1px solid ${color}33` }}
+          style={{ color, backgroundColor: `${color}18`, border: `1px solid ${color}30` }}
         >
           {tier.nameLabel}
         </div>
