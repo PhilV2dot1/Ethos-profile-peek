@@ -6,7 +6,7 @@ interface Props {
 }
 
 const MAX     = 2800;
-const GAP_DEG = 0.9;
+const GAP_DEG = 1.4;
 
 // Arc geometry — computed from canvas width at draw time
 // Arc spans 200° (190°→390°=30°), pivot well below canvas bottom for flat look
@@ -28,9 +28,9 @@ interface GeoParams {
 
 /** Derive geometry from actual canvas CSS width */
 function makeGeo(cssW: number, cssH: number): GeoParams {
-  // Radius fills ~55% of width; pivot sits 15% below canvas bottom
+  // Radius fills ~55% of width; pivot sits below canvas bottom for flat arc
   const r     = cssW * 0.47;
-  const thick = Math.max(8, cssW * 0.045);   // ring thickness scales with width
+  const thick = Math.max(5, cssW * 0.026);   // thin modern ring
   const cx    = cssW / 2;
   const cy    = cssH + cssW * 0.06;           // pivot below canvas → flat arc
   return { cx, cy, r, thick };
@@ -78,7 +78,7 @@ function drawGauge(canvas: HTMLCanvasElement, score: number) {
     ctx.arc(cx, cy, rIn,  a1, a0, true);
     ctx.closePath();
     ctx.fillStyle   = tier.color;
-    ctx.globalAlpha = 0.14;
+    ctx.globalAlpha = 0.10;
     ctx.fill();
     ctx.globalAlpha = 1;
 
@@ -111,9 +111,9 @@ function drawGauge(canvas: HTMLCanvasElement, score: number) {
   const color = tier.color;
   const angle = scoreToRad(score);
 
-  const tipX   = cx + Math.cos(angle) * (rIn - 5);
-  const tipY   = cy + Math.sin(angle) * (rIn - 5);
-  const baseW  = thick * 0.42;
+  const tipX   = cx + Math.cos(angle) * (rIn - 3);
+  const tipY   = cy + Math.sin(angle) * (rIn - 3);
+  const baseW  = thick * 0.55;
   const perpA  = angle + Math.PI / 2;
   const b1x    = cx + Math.cos(perpA) * baseW;
   const b1y    = cy + Math.sin(perpA) * baseW;
@@ -134,7 +134,7 @@ function drawGauge(canvas: HTMLCanvasElement, score: number) {
   ctx.restore();
 
   // Pivot
-  const pivotR = thick * 0.48;
+  const pivotR = thick * 0.6;
   ctx.beginPath();
   ctx.arc(cx, cy, pivotR, 0, Math.PI * 2);
   ctx.fillStyle = '#fff';

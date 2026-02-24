@@ -429,8 +429,8 @@ body {
 .gauge-canvas {
   display: block;
   width: 100%;
-  /* Height is set proportionally: roughly 55% of width, capped by viewport */
-  aspect-ratio: 1.85 / 1;
+  /* Height is set proportionally: wide panoramic arc */
+  aspect-ratio: 2.2 / 1;
 }
 
 .gauge-label-start,
