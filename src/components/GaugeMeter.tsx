@@ -80,7 +80,7 @@ function drawGauge(canvas: HTMLCanvasElement, score: number) {
     ctx.arc(cx, cy, rIn,  a1, a0, true);
     ctx.closePath();
     ctx.fillStyle   = tier.color;
-    ctx.globalAlpha = 0.10;
+    ctx.globalAlpha = 0.13;
     ctx.fill();
     ctx.globalAlpha = 1;
 
@@ -139,13 +139,13 @@ function drawGauge(canvas: HTMLCanvasElement, score: number) {
   const pivotR = thick * 0.6;
   ctx.beginPath();
   ctx.arc(cx, cy, pivotR, 0, Math.PI * 2);
-  ctx.fillStyle = '#fff';
+  ctx.fillStyle = '#1c1e27';
   ctx.fill();
   ctx.strokeStyle = color;
-  ctx.lineWidth   = 1.6;
+  ctx.lineWidth   = 1.5;
   ctx.stroke();
   ctx.beginPath();
-  ctx.arc(cx, cy, pivotR * 0.38, 0, Math.PI * 2);
+  ctx.arc(cx, cy, pivotR * 0.4, 0, Math.PI * 2);
   ctx.fillStyle = color;
   ctx.fill();
 

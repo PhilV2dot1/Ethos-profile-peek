@@ -57,8 +57,8 @@ export function TrendChart({ data }: Props) {
       <svg viewBox={`0 0 ${W} ${H}`} className="trend-svg">
         <defs>
           <linearGradient id="xp-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--blue)" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="var(--blue)" stopOpacity="0.01" />
+            <stop offset="0%" stopColor="var(--blue)" stopOpacity="0.30" />
+            <stop offset="100%" stopColor="var(--blue)" stopOpacity="0.02" />
           </linearGradient>
         </defs>
 
@@ -70,7 +70,7 @@ export function TrendChart({ data }: Props) {
               <line
                 x1={PAD.left} y1={y}
                 x2={PAD.left + INNER_W} y2={y}
-                stroke="rgba(31,33,38,.08)"
+                stroke="rgba(255,255,255,.06)"
                 strokeWidth={1}
                 strokeDasharray="3 3"
               />
@@ -79,7 +79,7 @@ export function TrendChart({ data }: Props) {
                 textAnchor="end"
                 dominantBaseline="middle"
                 fontSize={7}
-                fill="var(--text-muted)"
+                fill="rgba(236,237,242,.35)"
                 fontFamily="Inter, sans-serif"
               >
                 {v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}
